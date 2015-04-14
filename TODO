@@ -1,0 +1,48 @@
+GENERAL:
+
+- don't use GTree.  libavl?
+
+NOW:
+
+- Better name for "WaveTable"?
+
+SYNTH:
+
+- remove function calls where appropriate (machines should be fast)
+
+- use floats internally?
+
+- looped samples.  check out timidity-patches
+
+- GUS .pat-reader
+
+- Pitchbend
+
+- Vibrato
+
+- Effects.  Reverb?  Filter?  Look at sox, Sonic Flow, DAP, mxv...
+  SoundTracker and the XM format
+
+- Envelope
+
+- Aftertouch
+
+ADDITIVE SYNTH:
+
+- You should be able to graphically set up frequency composition at
+certain envelope points, and then it "morphs" linearly between these.
+GUI code from AUBE?  What's SoundTracker got?
+
+AUDIO:
+
+- generalize audio. use some library?
+
+- really make sure OSS is used correctly (check return values etc.)
+
+- only have device open when needed?
+
+- let user choose output form (sampling rate, format...) 
+
+- does it take proper care of endianness?
+
+/simon

@@ -1,0 +1,66 @@
+	About resampling
+	Simon Kågedal 1999-02-28
+
+Resampling
+----------
+
+I know how to resample with floats.  But that's ineffective.  Here's
+how to do it using 32 bit ints, using the fixed point technique.
+
+#define ACCURACY (12)
+
+/* This value defines how many bits we use for the decimal part in
+ * this fixed point thingy
+ * TODO: examine how that value matters and what an optimal value is 
+ */
+
+Given these values:
+
+  base_freq_of_sound:	the sample rate the sound was recorded with
+  play_sample_rate:	the sample rate we're playing with now
+  note_frequency:	function that gives a frequency from a note number
+  notenum:		the note we want to play
+  base_notenum:		the note that's recorded in the sound
+
+This is how the increment is calculated using floats:
+
+  inc = (base_freq_of_sound / play_sample_rate) *
+	(note_frequency (notenum) / note_frequency (base_notenum));
+
+So with fixed point (ints) it could be like:
+
+  inc = (base_freq_of_sound * note_frequency (notenum))
+	/ note_frequency (base_note_num);
+  inc = (inc << ACCURACY) / play_sample_rate;
+
+Gotta make sure this doesn't overflow.
+
+Say, roughly:
+
+	base_freq_of_sound <= 44100		
+	note_frequency (notenum) <= 20000
+	play_sample_rate <= 44100
+	note_frequency (base_note_num) >= 30
+
+See res.c...  It can just about do it for ACCURACY == 12.
+
+Filling buffer loop
+-------------------
+
+count = 0;
+loop while count < length:
+	val = buf[count >> ACCURACY];
+	count += speed;
+
+Interpolation
+-------------
+
+Goes something like this maybe:
+
+count = 0;
+loop while count < length:
+	i = count >> ACCURACY;
+	val = buf[i] +
+		(buf[i+1]-buf[i]) * (count % (1<<ACCURACY)) / (1<<ACCURACY)
+
+Yes, this will work I think...  Check the test in res.c.

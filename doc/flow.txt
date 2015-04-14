@@ -1,0 +1,131 @@
+	Flow of machines
+	Simon Kågedal 1999-03-06
+
+Pseudocode for configuration:
+
+----------------------------------------------------------------------
+
+; create three instruments
+
+s1 = wavetable_new ("sound1.wav")
+s2 = wavetable_new ("sound2.wav")
+s3 = wavetable_new ("sound3.wav")
+
+; a delay
+
+delay = delay_new (length, factor)
+
+; two of the instruments should go through the delay
+
+mixdelay = mixer_new ()
+
+mixer_add (mixdelay, s1, 0.5)
+mixer_add (mixdelay, s2, 0.5)
+
+delay_add (delay, mixdelay)
+
+; mix everything
+
+mix = mixer_new ()
+
+mixer_add (mix, s3)
+mixer_add (mix, delay)
+
+out = speaker_new ()
+
+out_add (mix)
+
+machines_set_top (out)
+
+----------------------------------------------------------------------
+
+Kind of like GTK and its containers.  Maybe have the "container"
+property on "Machine"-level so you do:
+
+machine_add (machine_to_add_to, machine_to_add)
+
+Hmm, that wouldn't work when you need an extra parameter like the
+mixer does.
+
+Anyway, it all builds up to some kind of graph (in this case a rooted
+tree):
+
+	out
+         |
+        mix
+       /   \
+   delay    s3
+     |
+  mixdelay
+ /        \
+s1         s2
+
+
+You could say this tree then gets postorder traversed.
+
+BUT..  It's not really a rooted tree...  Or even a tree, consider the
+following:
+
+		out	disk
+                   \   /
+                    mix2
+                   /    \
+                delay    flanger
+                   \    /
+		    mix1
+                   /    \
+                  s1     s2          
+
+
+That should be possible.
+
+Ok, so the "do_stuff" loop has to remember what nodes it has already
+visited.  It starts with the top nodes, "out" and "disk" in this case,
+and postorder traverses, but only to nodes it hasn't already visited
+this round.  So how does `flanger' recieve the output from `mix1'?  
+
+Maybe just keep the outbuffer in the "Machine" struct of `mix1'.  That
+would be easy.  Some machines would need two outbuffers for stereo
+output.  An really, generalizing this to N outbuffers isn't such a bad
+idea, although surround sound maybe isn't that important right now,
+consider a machine that save many channels to disk for later treatment
+in a multitrack editor.  Or something.
+
+Ok, so we'll have what, a list of outbuffers in each Machine?  Hmmm.
+
+Another thing: Each instrument will still mix it's own individual
+notes.  Should it be like that?  It probably should.
+
+But this is just the audio data flow...
+
+Control data
+------------
+
+...we should maybe at this stage also take the control data flow into
+consideration, like envelopes, LFO's...  That's really some other kind
+of edges (lines) in the graph.  Hmm, something like:
+
+
+lfo = lfo_new (speed, amplitude??)
+
+envelope = envelope_new (whatever_parameters)
+
+wavegen_add_pitch_controller (s1, lfo)
+
+wavegen_add_volume_contoller (s1, envelope)
+
+
+The control data generators will also need an out buffer, but it's a
+bit special since they don't need to update at every sample (in
+Csound, you set "sample rate" typically to 44100 and "k-rate" (control
+rate?) typically to 4410 or something, that is, controllers are
+updated each 10 samples).  And also, envelopes are quite closely
+coupled to notes (need to know on and off).
+
+I haven't really understood the flanger yet, but would it maybe be a
+good thing to have the sweeping waveform generator as an input to the
+flanger?  Like a triangle-LFO or an sine-LFO or whatever you want.
+Would that be unneccessary ineffective maybe...
+
+Lot of envelope kind of things really need to be specialized for a
+certain kind of instrument (see under "ADDITIVE SYNTH" in TODO...)

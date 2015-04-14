@@ -1,0 +1,29 @@
+En flanger effekt till machines-0.0.4
+
+Exempel på flanger:
+ 
+Machine *machflanger = flanger_new (2.0, 200.0, 50.0, 0.8, 
+				    SWEEP_TRIANGLE, 1.0);
+
+Parametrar:
+1 (float)  Mix (Depth). Hur mycket av effektljudet i förhållande till
+             ursprungsljudet som skall mixas ut.
+	     (Kan vara större än 1.0 eftersom förhållande. Kan tänkas
+              att detta ändras till en faktor mellan 0 och 1 istället?)
+2 (float)  Delay. Minimum delay, för närvarande i antal samples
+             (kan tänkas abstraheras till sekunder för att bli oberoende
+             av sample_rate)
+3 (float)  Sweep depth. Hur mycket extra delay som maximalt ges av den
+             "svepande" vågformen (amplitud*2).
+4 (float)  Rate. Den "svepande" vågformens frekvens (hastighet).
+5 (enum SweepWaveform). Vågform på "svepet".
+             SWEEP_SINE eller SWEEP_TRIANGLE. (Triangelform är det typiska).
+6 (float)  Feedback. Hur mycket av effektljudet i förhållande till
+             ursprungsljudet som skall mixas tillbaks till flangern.
+             (Se kommentar till parameter 1 angående faktor)
+
+/Henrik Nyman
+
+
+
+

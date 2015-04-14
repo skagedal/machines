@@ -1,0 +1,53 @@
+	Maths for `machines'
+	Simon Kågedal 1998-11-28
+
+The function `wavegen_note_do_stuff'
+------------------------------------
+
+One period is 2.0 * PI.
+
+`freq' is the base frequency for the note (e.g. 440 for A4)
+
+`amplitude' is the amplitude for the note (0 to 32767)
+
+`angle' is where we are on the circle right now (0.0 to 2.0 * PI)
+
+`sample_rate' is the number of samples per second (e.g. 44100)
+
+`samples_per_wave' is the number of samples per wave.  It is calculated
+as sample_rate / freq. 
+
+`inc_angle' is how much `angle' should be increased with for every sample.
+It is calculated as:
+
+(1.0 / samples_per_wave) * (2.0*PI)  ==
+(2.0*PI) / samples_per_wave ==
+(2.0*PI) / (sample_rate / freq) 
+
+LFO ("vibrato")
+---------------
+
+These parameters are needed:
+
+- amplitude
+- frequency
+
+We want these parameters directly MIDI controllable (at least amplitude).
+
+(I can't find any standard MIDI controller message for this??)
+
+Pitchbend
+---------
+
+MIDI pitch wheel values are between 0 and 0x3FFF, 0x2000 is a centered
+pitch wheel (unmodified value). 
+
+There should be an instrument setting `max_pitchbend' that determines 
+how many half-notes up the max value (0x3FFF) corresponds to.  The min
+value (0) will then correspond to the same number of half-notes down.
+
+The default should probably be 12, one octave.  I.e., a pitchbend value
+of 0x3FFF doubles the pitch and a value of 0 "halves" it.
+
+Look at the procedure `pitchbend' in maths.sml for an example
+implementation.

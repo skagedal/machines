@@ -1,0 +1,16 @@
+Wed Mar 10 20:53:46 1999  Simon Kågedal  <sika8225@csd.uu.se>
+
+	* app/wavetable.c, app/lipaconf.c: Now you can specify base-note
+	for a WaveTable instrument
+
+	* app/machines.c: Allow several machines listen to one channel 
+
+Tue Mar  9 19:49:23 1999  Simon Kågedal  <sika8225@csd.uu.se>
+
+	* Implemented doc/flow.txt stuff
+
+Sat Mar  6 14:50:42 1999  Simon Kagedal  <sika8225@csd.uu.se>
+
+	* midievents.[ch]: removed midi_get_* functions and added
+	MIDI_GET_ macros
+

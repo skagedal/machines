@@ -1,0 +1,47 @@
+; Simple .machines file
+
+
+; Make some instruments...
+
+(define bs (wavetable-new-from-file "bs.wav" 60))
+(define strings (wavetable-new-from-file-looped "strings.wav"
+	65 4569 13614))
+(define sine (wavegen-new 'wavegen-sine))
+
+; Mix them
+
+(define mixer (mixer-new))
+
+; Would be good if you could just do (mixer-add-child mixer bs strings...)
+
+(mixer-add-child mixer bs 0.5)
+(mixer-add-child mixer strings 0.5)
+(mixer-add-child mixer sine 0.5)
+
+; Create a delay
+
+(define delay (delay-new 0.25 2))
+
+(set-child delay mixer)
+
+; Create a flanger
+
+(define flanger (flanger-new 2.0 0.0045 0.0011 0.5 'sweep-triangle 1.0))
+
+(set-child flanger delay)
+
+; Create output
+
+(define out (speaker-new))
+
+(set-child out flanger)
+
+(add-top-node out)
+
+; Connect to MIDI channels
+
+(add-to-midi-channel bs 0)
+(add-to-midi-channel strings 1)
+(add-to-midi-channel sine 2)
+
+

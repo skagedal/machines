@@ -1,0 +1,25 @@
+simon 1999-01-16
+Some benchmarkings from machines 0.0.4:
+
+WAVEGEN_SQUARE, filling 10000 1024-gint16 buffers:
+
+	$time ./benchmach
+	freq: 440       amp: 32767
+	sample rate: 44100
+
+	real    0m9.237s
+	user    0m9.220s
+	sys     0m0.010s
+
+WAVEGEN_SINE, filling 10000 1024-gint16 buffers:
+
+	$time ./benchmach
+	freq: 440       amp: 32767
+	sample rate: 44100
+
+	real    0m24.373s
+	user    0m24.330s
+	sys     0m0.040s
+
+Conclusion: sin() is slow.  Try using a wavetable.  Listen for any
+differences.  Optimal wavetable-size?

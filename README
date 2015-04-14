@@ -1,0 +1,83 @@
+
+	Machines 0.0.7
+	Copyright (C) 1999 Simon Kågedal and Henrik Nyman
+	An ALGORHYTHM Production
+
+This is `machines' by Simon Kågedal.
+
+Installing
+----------
+
+Requirements:
+	* GLib [1] >= 1.2.0 
+	* LIPA [2] - for now, will be replaced
+	* audiofile [3] - the free implementation of SGI audio file
+          library
+
+Be sure to get and install those, then just run ./configure and
+make to build `machines'.
+
+Start up
+--------
+
+There's a couple of example configuration files in the "examples"
+directory.  In order for machines to find the sound files of those
+examples, you gotta start it up from the top directory of the
+distribution.
+
+Do something like:
+
+mkfifo /tmp/midififo
+./app/machines -c examples/1.mach < /tmp/midififo
+
+(Type "machines --help" to see what other options you have.)
+
+Then switch to another xterm or virtual console or whatever and do:
+
+Usage with midikb [4]
+---------------------
+
+midikb -o '>/tmp/midififo'
+
+Usage with clavier [5]
+----------------------
+
+clavier -o /tmp/midififo
+
+Usage with midid [6]
+--------------------
+
+echo '"FileDriver"   "/tmp/midififo"' > midid.conf
+midid midid.conf
+midiplay some_midi_file.mid
+
+Usage with external MIDI keyboard
+---------------------------------
+
+Haven't tried, but I hope this should work:
+
+./app/machines -c examples/1.mach < /dev/midi
+
+Shut up
+-------
+
+If machines seen to be stuck at playing some note and you want it to
+be quiet, do:
+
+cat machines-source-dir/shutup > /tmp/midififo
+
+(This "shutup" file contains MIDI "All notes off" messages on all
+channels.)
+
+The `machines' page is at:
+
+http://www.update.uu.se/~sk/machines/
+
+----------------------------------------------------------------------
+[1] http://www.gtk.org/
+[2] http://www.update.uu.se/~sk/lipa/
+[3] http://www.68k.org/~michael/audiofile - but the newest version is
+    distributed with GNOME 1.0, http://www.gnome.org/
+[4] http://www.sdf.se/~simon/midikb.html
+[5] http://www.sdf.se/~simon/clavier.html
+[6] http://www.umr.edu/~johns/projects/midid/

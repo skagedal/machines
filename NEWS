@@ -1,0 +1,33 @@
+New in 0.0.7:
+
+ - Delay and Flanger take lengths in seconds instead of number of
+   samples
+ - A new "Disk" machine for recording
+ - Several machines can listen to the same channel
+ - WaveTable instruments let you specify base note (the "strings"
+   instrument should be more in tune now...  :) )
+ - You can specify sample rate, buffer size and config file on the
+   command line
+
+New in 0.0.6:
+
+ - Handles "all notes off" MIDI messages
+ - Uses LIPA for configuring!
+ - Internal rework
+ - Some things that worked earlier probably don't work now (but
+   way cooler things do... :) )
+
+New in 0.0.5:
+
+ - Flanger effect from Henrik Nyman
+ - Looping
+ - Recording; type "machines outfile.raw"
+
+New in 0.0.4:
+
+ - Soundfile playing
+ - Delay 
+
+New in 0.0.3:
+
+- It works!

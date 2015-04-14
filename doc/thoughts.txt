@@ -1,0 +1,42 @@
+simon 1999-03-04
+
+1. Configuration
+
+`machines' will be configuraable in two ways:
+
+	1. setup through Guile
+
+	2. runtime configuration through MIDI
+
+1.1 Setup through Guile
+----------------------
+
+Here you can set up instruments, wavetables, MIDI channels,
+etc. exactly as you want through Guile code.
+
+But: Why does guile take two years to start? 
+
+1.2. Setup through MIDI
+---------------------
+
+The only way for `machines' to communicate with other programs at
+runtime is through MIDI, with specialized control through control and
+SysEx messages.  So the configurator program needs to have contact
+with `machines' at the same time as e.g. midikb is used for input.
+
+This would best be done by some kind of midi server.  midid.
+
+An alternative would be to let `machines' do input/output through
+several streams (FIFOs). 
+
+Anyway, in some way, contact is made.  Now SysEx messages can be sent,
+back and forth.  These include commands such as:
+
+- Get or modify channel settings
+- Get or modify instrument settings
+
+Also control messages such as:
+
+- Change vibrato
+- Cutoff, resonance, bla bla
+
